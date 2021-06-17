@@ -2,12 +2,12 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: ingress-backend-demo
+  name: ingress-default-backend
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  namespace: ingress-backend-demo
+  namespace: ingress-default-backend
   name: nginx-custom-default-backend
   labels:
     app.kubernetes.io/name: nginx-custom-default-backend
@@ -24,7 +24,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: ingress-backend-demo
+  namespace: ingress-default-backend
   name: nginx-custom-default-backend
   labels:
     app.kubernetes.io/name: nginx-custom-default-backend
@@ -43,11 +43,13 @@ spec:
     spec:
       containers:
       - name: nginx-custom-default-backend
-        image: <your-registry>/custom-default-backend:1.0
+        image: ghcr.io/getsproud/custom-default-backend:latest
         ports:
         - containerPort: 80
-        # Setting the environment variable DEBUG we can see the headers sent 
+        # Setting the environment variable DEBUG we can see the headers sent
         # by the ingress controller to the backend in the client response.
         env:
         - name: DEBUG
           value: "false"
+      imagePullSecrets:
+      - name: gh-registry
