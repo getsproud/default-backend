@@ -18,7 +18,7 @@ spec:
     app.kubernetes.io/part-of: ingress-nginx
   ports:
   - port: 80
-    targetPort: 80
+    targetPort: 3000
     name: http
 ---
 apiVersion: apps/v1
@@ -44,8 +44,9 @@ spec:
       containers:
       - name: nginx-custom-default-backend
         image: ghcr.io/getsproud/custom-default-backend:latest
+        imagePullPolicy: Always
         ports:
-        - containerPort: 80
+        - containerPort: 3000
         # Setting the environment variable DEBUG we can see the headers sent
         # by the ingress controller to the backend in the client response.
         env:
